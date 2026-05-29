@@ -271,8 +271,15 @@ def get_symtoms(user_disease):
 from duckduckgo_search import DDGS
 
 def getDiseaseInfo(keywords):
-    results = DDGS().text(keywords, region='wt-wt', safesearch='Off', timelimit='y')
-    return results[0]['body']
+    try:
+        results = DDGS().text(keywords, region='wt-wt', safesearch='Off', timelimit='y', max_results=1)
+    except Exception:
+        return "Unable to fetch disease details right now. Please consult a healthcare professional for accurate medical advice."
+
+    if not results:
+        return "No additional disease details were found. Please consult a healthcare professional for accurate medical advice."
+
+    return results[0].get('body') or "No additional disease details were found. Please consult a healthcare professional for accurate medical advice."
 
 
 @app.route('/ask',methods=['GET','POST'])
@@ -460,5 +467,6 @@ def chat_msg():
 
 if __name__ == "__main__":
 
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=False, port=3000)

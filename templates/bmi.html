@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BMI Calculator</title>
+  <style>
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #17202a; background: #f6faf9; }
+    main { max-width: 760px; margin: 0 auto; padding: 34px 20px; }
+    a { color: #115e59; font-weight: 700; text-decoration: none; }
+    .tool { background: #fff; border: 1px solid #d9e2e7; border-radius: 8px; padding: 24px; }
+    label { display: block; margin-top: 14px; font-weight: 700; }
+    input { width: 100%; min-height: 42px; border: 1px solid #d9e2e7; border-radius: 6px; padding: 0 10px; font-size: 16px; }
+    button { margin-top: 18px; min-height: 42px; border: 0; border-radius: 6px; background: #0f766e; color: #fff; font-weight: 700; padding: 0 16px; }
+    #result { margin-top: 18px; font-weight: 700; color: #115e59; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="/">Home</a> / <a href="/user">Chat</a></p>
+    <section class="tool">
+      <h1>BMI Calculator</h1>
+      <label for="height">Height in cm</label>
+      <input id="height" type="number" min="1" step="0.1">
+      <label for="weight">Weight in kg</label>
+      <input id="weight" type="number" min="1" step="0.1">
+      <button id="calculate" type="button">Calculate</button>
+      <div id="result"></div>
+    </section>
+  </main>
+  <script>
+    document.getElementById("calculate").addEventListener("click", () => {
+      const height = Number(document.getElementById("height").value) / 100;
+      const weight = Number(document.getElementById("weight").value);
+      const result = document.getElementById("result");
+      if (!height || !weight) {
+        result.textContent = "Please enter height and weight.";
+        return;
+      }
+      const bmi = weight / (height * height);
+      const status = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
+      result.textContent = "BMI: " + bmi.toFixed(1) + " - " + status;
+    });
+  </script>
+</body>
+</html>

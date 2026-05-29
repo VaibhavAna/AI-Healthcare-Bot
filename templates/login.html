@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: Arial, Helvetica, sans-serif; color: #17202a; background: #f6faf9; padding: 20px; }
+    form { width: min(420px, 100%); background: #fff; border: 1px solid #d9e2e7; border-radius: 8px; padding: 24px; }
+    h1 { margin: 0 0 18px; }
+    label { display: block; font-weight: 700; margin-top: 14px; }
+    input { width: 100%; min-height: 42px; border: 1px solid #d9e2e7; border-radius: 6px; padding: 0 10px; font-size: 16px; }
+    button { width: 100%; margin-top: 18px; min-height: 42px; border: 0; border-radius: 6px; background: #0f766e; color: #fff; font-weight: 700; }
+    a { color: #115e59; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <form method="post">
+    <h1>Login</h1>
+    <label for="uname">Username</label>
+    <input id="uname" name="uname" required>
+    <label for="passw">Password</label>
+    <input id="passw" name="passw" type="password" required>
+    <button type="submit">Login</button>
+    <p><a href="/register">Create an account</a> or <a href="/">go home</a></p>
+  </form>
+</body>
+</html>

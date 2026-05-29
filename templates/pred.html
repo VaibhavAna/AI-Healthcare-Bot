@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction Result</title>
+  <style>
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f6faf9; color: #17202a; }
+    main { max-width: 760px; margin: 0 auto; padding: 34px 20px; }
+    a { color: #115e59; font-weight: 700; text-decoration: none; }
+    section { background: #fff; border: 1px solid #d9e2e7; border-radius: 8px; padding: 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="/">Home</a> / <a href="/user">Chat</a></p>
+    <section>
+      <h1>Prediction Result</h1>
+      <p><strong>Prediction:</strong> {{ pred or "No prediction available." }}</p>
+      <p><strong>File:</strong> {{ f_name or "No file available." }}</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Chat</title>
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #64737d;
+      --line: #d9e2e7;
+      --brand: #0f766e;
+      --brand-dark: #115e59;
+      --bg: #f4faf8;
+      --bot: #ffffff;
+      --user: #dff3ef;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--bg); }
+    header { border-bottom: 1px solid var(--line); background: #fff; }
+    nav { max-width: 1060px; margin: 0 auto; padding: 16px 20px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .brand { color: var(--brand-dark); font-weight: 700; font-size: 20px; }
+    .links { display: flex; gap: 8px; flex-wrap: wrap; }
+    a { color: var(--brand-dark); font-weight: 700; text-decoration: none; }
+    .shell { max-width: 1060px; margin: 0 auto; padding: 22px 20px; display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 18px; }
+    .side, .chat { background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+    .side { padding: 18px; }
+    .side h2 { margin: 0 0 12px; font-size: 18px; }
+    .side p { margin: 0 0 14px; color: var(--muted); line-height: 1.5; }
+    .quick { display: grid; gap: 8px; }
+    .quick a { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+    .chat { min-height: 72vh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+    .chat-title { padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .chat-title strong { display: block; color: var(--brand-dark); }
+    .chat-title span { color: var(--muted); font-size: 14px; }
+    #messages { padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: min(680px, 88%); padding: 12px 14px; border-radius: 8px; line-height: 1.45; border: 1px solid var(--line); }
+    .msg.bot { background: var(--bot); align-self: flex-start; }
+    .msg.user { background: var(--user); align-self: flex-end; border-color: #b9ddd7; }
+    form { display: flex; gap: 10px; padding: 14px; border-top: 1px solid var(--line); background: #fff; }
+    input { flex: 1; min-width: 0; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; padding: 0 12px; font-size: 16px; }
+    button { min-height: 44px; border: 0; border-radius: 6px; background: var(--brand); color: #fff; font-weight: 700; padding: 0 18px; cursor: pointer; }
+    @media (max-width: 780px) {
+      .shell { grid-template-columns: 1fr; }
+      .chat { min-height: 68vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">AI Healthcare Bot</div>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="/diseases">Symptoms</a>
+        <a href="/upload">BMI</a>
+      </div>
+    </nav>
+  </header>
+  <main class="shell">
+    <aside class="side">
+      <h2>Chat Options</h2>
+      <p>Start the conversation and follow the prompts. You can type symptoms separated by commas.</p>
+      <div class="quick">
+        <a href="/diseases" target="_blank">Symptoms List</a>
+        <a href="/instruct">Instructions</a>
+        <a href="/upload">BMI Calculator</a>
+      </div>
+    </aside>
+    <section class="chat" aria-label="Healthcare chatbot">
+      <div class="chat-title">
+        <strong>Disease Prediction Chat</strong>
+        <span>Session {{ sessionId }}</span>
+      </div>
+      <div id="messages"></div>
+      <form id="chatForm">
+        <input id="messageInput" autocomplete="off" placeholder="Type your reply..." aria-label="Message">
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+  <script>
+    const sessionId = "{{ sessionId }}";
+    const messages = document.getElementById("messages");
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+
+    function addMessage(text, sender) {
+      const item = document.createElement("div");
+      item.className = "msg " + sender;
+      item.innerHTML = text;
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function sendMessage(text, visible = true) {
+      if (visible) addMessage(text, "user");
+      const url = "/ask?message=" + encodeURIComponent(text) + "&sessionId=" + encodeURIComponent(sessionId);
+      const response = await fetch(url);
+      const data = await response.json();
+      data.answer.forEach((line) => addMessage(line, "bot"));
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      sendMessage(text);
+    });
+
+    sendMessage("undefined", false);
+  </script>
+</body>
+</html>
